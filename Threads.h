@@ -15,9 +15,9 @@
 #ifndef Threads_h
 #define Threads_h
 
-#include "PrintArray.h"
-#include "Arduino.h"
-#include "HardwareSerial.h"
+#include <PrintArray.h>
+#include <Arduino.h>
+#include <HardwareSerial.h>
 
 #define MAX_N_THREADS 10
 
