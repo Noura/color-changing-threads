@@ -38,16 +38,25 @@ void Threads::init(int _N, int* _pins, int* _powerLevels, unsigned long* _powerD
 // _threadsOn: which threads should be on (color changed)
 void Threads::update(bool* _threadsOn)
 {
+    Serial.print("Threads::update::prevOn ");PrintArray::printArrayBool(prevOn, N);
+    Serial.print("Threads::update::_threadsOn ");PrintArray::printArrayBool(_threadsOn, N);
+    Serial.print("Threads::update::powered ");PrintArray::printArrayUnsignedLong(powered, N);
+    Serial.print("Threads::update::powerDurations ");PrintArray::printArrayUnsignedLong(powerDurations, N);
+    Serial.print("Threads::update::pins ");PrintArray::printArrayInt(pins, N);
     unsigned long now = millis();
+    Serial.print("Threads::update::now ");Serial.println(now);
     for (int i = 0; i < N; i++) {
+        Serial.print("Threads::update::i ");Serial.println(i);
         // if thread is supposed to be off, set power to 0
         if (!_threadsOn[i]) {
+            Serial.println("Threads::update thread is turned off so set power to 0");
             analogWrite(pins[i], 0);
             continue;
         } 
         // OK thread is supposed to be on
         // if the thread just got turned on, we should start supplying power
         if (!prevOn[i]) {
+            Serial.println("Threads::update analogWrite give power");
             analogWrite(pins[i], powerLevels[i]);
             powered[i] = now;
             continue;
@@ -55,6 +64,7 @@ void Threads::update(bool* _threadsOn)
         // OK so the thread already started getting power
         // if it has been getting power for a while, set power to 0
         if ( (now - powered[i]) > powerDurations[i] ) {
+            Serial.println("Threads::update thread has been getting power long enough so set power to 0");
             analogWrite(pins[i], 0);
         }
     } 
